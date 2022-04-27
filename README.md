@@ -8,11 +8,18 @@ Each excel row will also contain the number of occurrences of the searched item 
 
 ## Dependencies
 
+Requires [Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/download.html)
+
 dependencies can be installed using conda.yaml file. Uses `Python=3.9.6` and `rpaframework==13.0.3`.
 
 ```bash
+conda init
+conda create --name env
+conda activate env
 conda env update -f conda.yaml
 ```
+
+Note: While using miniconda, `conda install pywin32` may be needed for win32api
 
 ## Configuration
 
@@ -31,13 +38,3 @@ conda env update -f conda.yaml
 ```bash
 python tasks.py
 ```
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)

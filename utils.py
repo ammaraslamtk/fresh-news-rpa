@@ -1,4 +1,6 @@
 import re
+import json
+import logging
 from datetime import date, timedelta
 
 from dateutil.relativedelta import relativedelta
@@ -43,3 +45,15 @@ def search_currency(string: str) -> bool:
     """
     exp = r"(\$[0-9][0-9,]*(.[0-9]+)?)|([0-9][0-9,]*(.[0-9]+)?( dollars| USD))"
     return re.search(exp, string)
+
+def configure(config_file):
+    config = {}
+    try:
+        with open(config_file) as file:
+            config = json.load(file)
+    except FileNotFoundError:
+        logging.error(f"File {config_file} does not exist, using defaults")
+    search_phrase = config.get("search_phrase", "Python")
+    section = config.get("section", "")
+    months = config.get("months", 0)
+    return search_phrase, section, months

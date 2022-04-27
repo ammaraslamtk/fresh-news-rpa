@@ -10,7 +10,7 @@ from RPA.Excel.Application import Application
 from RPA.HTTP import HTTP
 from selenium.common.exceptions import NoSuchElementException
 
-from utils import get_date_range, search_currency
+from utils import configure, get_date_range, search_currency
 
 console_handler = logging.StreamHandler()
 logger = logging.getLogger("nytimes")
@@ -164,7 +164,6 @@ def get_news_lists(phrase: str) -> None:
     http = HTTP()
     # Wait for the filter to fetch new data
     # There was no apparent function available to detect DOM changes
-    # And waiting for JQuery.active == 0 did not work -- so added a sleep
     time.sleep(2)
     phrase = phrase.lower()
     li_select = 'css:li[data-testid="search-bodega-result"]'
@@ -186,7 +185,7 @@ def get_news_lists(phrase: str) -> None:
             http.download(image, path)
         except NoSuchElementException:
             image, path = None, None
-        title_count, desc_count = title.lower().count(phrase), description.count(phrase)
+        title_count, desc_count = title.lower().count(phrase), description.lower().count(phrase)
         has_money = bool(search_currency(title) or search_currency(description))
         item = title, date, description, image, title_count, desc_count, has_money, path
         news.append(item)
@@ -197,15 +196,7 @@ def main():
     """
     The main function
     """
-    config = {}
-    try:
-        with open(CONFIG_FILE) as file:
-            config = json.load(file)
-    except FileNotFoundError:
-        logging.error(f"File {CONFIG_FILE} does not exist, using defaults")
-    search_phrase = config.get("search_phrase", "Python")
-    section = config.get("section", "")
-    months = config.get("months", 0)
+    search_phrase, section, months = configure(CONFIG_FILE)
     open_excel_book()
     try:
         open_the_website(WEBSITE_URL)

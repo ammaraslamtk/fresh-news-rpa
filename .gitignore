@@ -11,3 +11,6 @@ env/
 .virtual_documents/
 */.virtual_documents/*
 testrun/*
+*.xlsx
+*.jpg
+*.png
