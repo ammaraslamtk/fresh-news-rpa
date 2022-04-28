@@ -1,3 +1,4 @@
+
 # Python nytimes scrapper
 
 A simple web scraper robot implemented in Python using the `rpaframework` set of libraries.
@@ -23,7 +24,10 @@ Note: While using miniconda, `conda install pywin32` may be needed for win32api
 
 ## Configuration
 
-`config.json` contains the following modifiable configurations, the item to search, the section to search from and the range (in months) to search in (from current date)
+`config.json` contains the following modifiable configurations:
+ - **search_phrase:** the phrase to search
+ - **section:** the section to search in - if the provided section isn't available, it is ignored
+ - **months:** the range (in months) to search (till the end of current month)
 
 ```json
 {
