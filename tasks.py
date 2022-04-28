@@ -58,7 +58,7 @@ def open_the_website(url: str) -> None:
         url: The url to open
     """
     logger.info(f"Opening {url}")
-    browser_lib.open_available_browser(url)
+    browser_lib.open_available_browser(url, maximized=True)
 
 
 def click_search_button() -> None:
@@ -185,7 +185,9 @@ def get_news_lists(phrase: str) -> None:
             http.download(image, path)
         except NoSuchElementException:
             image, path = None, None
-        title_count, desc_count = title.lower().count(phrase), description.lower().count(phrase)
+        title_count, desc_count = title.lower().count(
+            phrase
+        ), description.lower().count(phrase)
         has_money = bool(search_currency(title) or search_currency(description))
         item = title, date, description, image, title_count, desc_count, has_money, path
         news.append(item)

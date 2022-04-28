@@ -28,7 +28,7 @@ Note: While using miniconda, `conda install pywin32` may be needed for win32api
 ```json
 {
   "search_phrase": "$15",
-  "section": "Businesss",
+  "section": "Business",
   "months": 48
 }
 ```
