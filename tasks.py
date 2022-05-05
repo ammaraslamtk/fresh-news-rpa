@@ -35,7 +35,7 @@ def open_excel_book() -> None:
     try:
         excel.open_workbook(WORKBOOK_NAME)
     except FileNotFoundError:
-        path = f"{os.path.abspath(os.path.dirname(__file__))}\\{WORKBOOK_NAME}"
+        path = os.path.join(os.path.abspath(os.path.dirname(__file__)), WORKBOOK_NAME)
         excel.create_workbook(path)
     try:
         excel.set_active_worksheet(SHEET_NAME)
@@ -138,6 +138,7 @@ def store_excel(news: List[tuple]) -> None:
     Args:
         news: List of news to store
     """
+    logger.info("Appending new data to excel file")
     excel.append_rows_to_worksheet(news)
     excel.save_workbook()
 
