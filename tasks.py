@@ -39,19 +39,22 @@ def open_excel_book() -> None:
             os.path.abspath(os.path.dirname(__file__)), OUTPUT_DIR, WORKBOOK_NAME
         )
         excel.create_workbook(path)
+    headers = (
+        "Title",
+        "Date",
+        "Description",
+        "Filename",
+        "Title Count",
+        "Description Count",
+        "Has Money",
+    )
     try:
         excel.set_active_worksheet(SHEET_NAME)
+        if excel.get_cell_value(1, 1) == None:
+            for index, header in enumerate(headers):
+                excel.set_cell_value(1, index + 1, header)
     except ValueError as e:
         if "Unknown worksheet" in e.args[0]:
-            headers = (
-                "Title",
-                "Date",
-                "Description",
-                "Filename",
-                "Title Count",
-                "Description Count",
-                "Has Money",
-            )
             excel.create_worksheet(SHEET_NAME, [headers])
             excel.set_active_worksheet(SHEET_NAME)
 
