@@ -1,4 +1,3 @@
-import json
 import logging
 import os
 import time
@@ -6,7 +5,7 @@ from typing import List
 from urllib.parse import urlparse
 
 from RPA.Browser.Selenium import Selenium
-from RPA.Excel.Application import Application
+from RPA.Excel.Files import Files
 from RPA.HTTP import HTTP
 from selenium.common.exceptions import NoSuchElementException
 
@@ -20,8 +19,7 @@ console_handler.setFormatter(formatter)
 logger.setLevel(logging.INFO)
 
 browser_lib = Selenium()
-app = Application()
-app.open_application()
+excel = Files()
 
 WORKBOOK_NAME = "workbook.xlsx"
 SHEET_NAME = "Sheet1"
@@ -35,19 +33,16 @@ def open_excel_book() -> None:
     Use SHEET_NAME
     """
     try:
-        app.open_workbook(WORKBOOK_NAME)
-    except RuntimeError as e:
-        if "deleted" in e.args[0]:
-            app.add_new_workbook()
-            # Not sure where it saves (when full path isn't given)
-            path = f"{os.path.abspath(os.path.dirname(__file__))}\\{WORKBOOK_NAME}"
-            app.save_excel_as(path)
+        excel.open_workbook(WORKBOOK_NAME)
+    except FileNotFoundError:
+        path = f"{os.path.abspath(os.path.dirname(__file__))}\\{WORKBOOK_NAME}"
+        excel.create_workbook(path)
     try:
-        app.set_active_worksheet(SHEET_NAME)
-    except RuntimeError as e:
-        if "Invalid index" in e.args[0]:
-            app.add_new_sheet(SHEET_NAME)
-            app.set_active_worksheet(SHEET_NAME)
+        excel.set_active_worksheet(SHEET_NAME)
+    except ValueError as e:
+        if "Unknown worksheet" in e.args[0]:
+            excel.create_worksheet(SHEET_NAME)
+            excel.set_active_worksheet(SHEET_NAME)
 
 
 def open_the_website(url: str) -> None:
@@ -143,12 +138,8 @@ def store_excel(news: List[tuple]) -> None:
     Args:
         news: List of news to store
     """
-    for data in news:
-        logger.info(f"Writing {data[0]} to excel")
-        row, _ = app.find_first_available_row()
-        for index, content in enumerate(data):
-            app.write_to_cells(row=row, column=index + 1, value=str(content))
-    app.save_excel()
+    excel.append_rows_to_worksheet(news)
+    excel.save_workbook()
 
 
 def get_news_lists(phrase: str) -> None:
@@ -209,7 +200,7 @@ def main():
         store_excel(news)
     finally:
         browser_lib.close_all_browsers()
-        app.quit_application()
+        excel.close_workbook()
 
 
 if __name__ == "__main__":
