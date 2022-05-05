@@ -9,22 +9,15 @@ Each excel row will also contain the number of occurrences of the searched item 
 
 ## Dependencies
 
-Requires [Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/download.html)
-
-dependencies can be installed using conda.yaml file. Uses `Python=3.9.6` and `rpaframework==13.0.3`.
+On VS Code, The extension Robocorp Code needs to be installed, after which a terminal with Robot Environment can be opened. In the terminal, the following command needs to be run.
 
 ```bash
-conda init
-conda create --name env
-conda activate env
-conda env update -f conda.yaml
+rcc run
 ```
-
-Note: While using miniconda, `conda install pywin32` may be needed for win32api
 
 ## Configuration
 
-`config.json` contains the following modifiable configurations:
+`devdata/work-items-in/fresh-news-test-input/work-items.json` contains the following test payload:
  - **search_phrase:** the phrase to search
  - **section:** the section to search in - if the provided section isn't available, it is ignored
  - **months:** the range (in months) to search (till the end of current month)
@@ -36,6 +29,8 @@ Note: While using miniconda, `conda install pywin32` may be needed for win32api
   "months": 48
 }
 ```
+
+These should be configured as cloud work items when running the robot in a cloud environment like Control Room.
 
 ## Usage
 

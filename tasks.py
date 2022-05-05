@@ -21,21 +21,24 @@ logger.setLevel(logging.INFO)
 browser_lib = Selenium()
 excel = Files()
 
+OUTPUT_DIR = "output"
 WORKBOOK_NAME = "workbook.xlsx"
 SHEET_NAME = "Sheet1"
 WEBSITE_URL = "https://nytimes.com"
-CONFIG_FILE = "config.json"
+# CONFIG_FILE = os.path.json("devdata", "env.json")
 
 
 def open_excel_book() -> None:
     """
-    Open WORKBOOK_NAME if exists or create new workbook
-    Use SHEET_NAME
+    Open WORKBOOK_NAME if it exists or create new workbook
+    Uses SHEET_NAME as the sheet
     """
     try:
-        excel.open_workbook(WORKBOOK_NAME)
+        excel.open_workbook(os.path.join(OUTPUT_DIR, WORKBOOK_NAME))
     except FileNotFoundError:
-        path = os.path.join(os.path.abspath(os.path.dirname(__file__)), WORKBOOK_NAME)
+        path = os.path.join(
+            os.path.abspath(os.path.dirname(__file__)), OUTPUT_DIR, WORKBOOK_NAME
+        )
         excel.create_workbook(path)
     try:
         excel.set_active_worksheet(SHEET_NAME)
@@ -174,7 +177,7 @@ def get_news_lists(phrase: str) -> None:
         try:
             image = element.find_element_by_tag_name("img").get_attribute("src")
             path = urlparse(image).path.rsplit("/", 1)[-1]
-            http.download(image, path)
+            http.download(image, os.path.join(OUTPUT_DIR, path))
         except NoSuchElementException:
             image, path = None, None
         title_count, desc_count = title.lower().count(
@@ -190,7 +193,7 @@ def main():
     """
     The main function
     """
-    search_phrase, section, months = configure(CONFIG_FILE)
+    search_phrase, section, months = configure()
     open_excel_book()
     try:
         open_the_website(WEBSITE_URL)
