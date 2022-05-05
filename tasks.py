@@ -4,11 +4,11 @@ import time
 from typing import List
 from urllib.parse import urlparse
 
+from selenium.common.exceptions import NoSuchElementException
+
 from RPA.Browser.Selenium import Selenium
 from RPA.Excel.Files import Files
 from RPA.HTTP import HTTP
-from selenium.common.exceptions import NoSuchElementException
-
 from utils import configure, get_date_range, search_currency
 
 console_handler = logging.StreamHandler()
@@ -23,9 +23,8 @@ excel = Files()
 
 OUTPUT_DIR = "output"
 WORKBOOK_NAME = "workbook.xlsx"
-SHEET_NAME = "Sheet1"
+SHEET_NAME = "Sheet"
 WEBSITE_URL = "https://nytimes.com"
-# CONFIG_FILE = os.path.json("devdata", "env.json")
 
 
 def open_excel_book() -> None:
@@ -44,7 +43,16 @@ def open_excel_book() -> None:
         excel.set_active_worksheet(SHEET_NAME)
     except ValueError as e:
         if "Unknown worksheet" in e.args[0]:
-            excel.create_worksheet(SHEET_NAME)
+            headers = (
+                "Title",
+                "Date",
+                "Description",
+                "Filename",
+                "Title Count",
+                "Description Count",
+                "Has Money",
+            )
+            excel.create_worksheet(SHEET_NAME, [headers])
             excel.set_active_worksheet(SHEET_NAME)
 
 
@@ -159,7 +167,7 @@ def get_news_lists(phrase: str) -> None:
     http = HTTP()
     # Wait for the filter to fetch new data
     # There was no apparent function available to detect DOM changes
-    time.sleep(2)
+    time.sleep(3)
     phrase = phrase.lower()
     li_select = 'css:li[data-testid="search-bodega-result"]'
     date_select = 'span[data-testid="todays-date"]'
@@ -184,7 +192,7 @@ def get_news_lists(phrase: str) -> None:
             phrase
         ), description.lower().count(phrase)
         has_money = bool(search_currency(title) or search_currency(description))
-        item = title, date, description, image, title_count, desc_count, has_money, path
+        item = title, date, description, path, title_count, desc_count, has_money
         news.append(item)
     return news
 

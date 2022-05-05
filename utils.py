@@ -1,8 +1,9 @@
 import re
 from datetime import date, timedelta
-from RPA.Robocorp.WorkItems import WorkItems
 
 from dateutil.relativedelta import relativedelta
+
+from RPA.Robocorp.WorkItems import WorkItems
 
 
 def get_date_range(months: int) -> tuple:

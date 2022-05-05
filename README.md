@@ -1,19 +1,15 @@
 
 # Python nytimes scrapper
 
-A simple web scraper robot implemented in Python using the `rpaframework` set of libraries.
+A simple nytimes scraper robot implemented in Python using the `rpaframework` set of libraries.
 
-Searches for a specific search term provided in config.json, gets the meta data of the result, downloads the image and stores it all in excel
+Searches for a specific search term provided as configuration, gets the meta data of the result, downloads the image and stores it all data in an excel file.
 
 Each excel row will also contain the number of occurrences of the searched item in title and description, and if any references to currencies are present.
 
 ## Dependencies
 
-On VS Code, The extension Robocorp Code needs to be installed, after which a terminal with Robot Environment can be opened. In the terminal, the following command needs to be run.
-
-```bash
-rcc run
-```
+While using VS Code, The extension "Robocorp Code" needs to be installed.
 
 ## Configuration
 
@@ -34,6 +30,8 @@ These should be configured as cloud work items when running the robot in a cloud
 
 ## Usage
 
+Locally, a terminal with Robot Environment can be opened through the VSCode Extension. Afterwards, the following command needs to be run.
+
 ```bash
-python tasks.py
+rcc run
 ```
