@@ -26,7 +26,7 @@ rcc run
 {
   "search_phrase": "$15",
   "section": "Business",
-  "months": 48
+  "months": "48"
 }
 ```
 

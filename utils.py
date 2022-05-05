@@ -51,5 +51,5 @@ def configure():
     config.get_input_work_item()
     search_phrase = config.get_work_item_variable("search_phrase", "Python")
     section = config.get_work_item_variable("section", "")
-    months = config.get_work_item_variable("months", 0)
+    months = int(config.get_work_item_variable("months", 0))
     return search_phrase, section, months
