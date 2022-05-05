@@ -1,5 +1,3 @@
-gdg
-
 tasks:
   Run Python:
     shell: python tasks.py
